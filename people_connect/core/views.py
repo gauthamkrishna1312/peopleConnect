@@ -14,6 +14,38 @@ def index(request):
     posts = Post.objects.all()
     return render(request, 'index.html', {'posts':posts})
 
+#for profile page
+@login_required(login_url='signin')
+def account(request,usnm):
+    user_object = User.objects.get(username = usnm)
+    user_profile = Profiles.objects.get(user = user_object)
+    user_post = Post.objects.filter(user = usnm)
+    user_post_lenght = len(user_post)
+
+    context = {
+        'user_object' : user_object,
+        'user_profile' : user_profile,
+        'user_post' : user_post,
+        'user_post_lenght' : user_post_lenght,
+    }
+    return render(request, 'account.html', context)
+
+#for account settings
+@login_required(login_url='signin')
+def accounts_settings(request):
+    user_profile = Profiles.objects.get(user=request.user)
+
+    if request.method == 'POST' :
+
+        if request.FILES.get('image') is not None:
+            user_profile.profileimage = request.FILES['image']
+        if 'bio' in request.POST:
+            user_profile.bio = request.POST['bio']
+        user_profile.save()
+
+        return redirect('settings')
+    return render(request, 'accounts_settings.html', {'user_profile': user_profile})
+
 #for uploading posts
 @login_required(login_url='signin')
 def upload(request):

@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1><a href="/">Home</a> / Account Settings / <b>{{ user.username }}</b></h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+       <div>
+            <h2>Profile Image</h2>
+            <input type="file" name="image"><br>
+            <img width="100px" height="100px" src="{{user_profile.profileimage.url}}" alt="profileimage"><br>
+            <h2>Bio</h2>
+            <textarea id="about" name="bio">{{user_profile.bio}}</textarea>         
+       </div> 
+       <div>
+           <button> <a href="/">Cancel</a> </button>
+           <button type="submit"> Save </button>
+       </div>
+    </form>
+</body>
+</html>
