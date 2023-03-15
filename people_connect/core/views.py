@@ -1,17 +1,55 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profiles
+from .models import Profiles, Post, LikePost
 
 # Create your views here.
 
-#to call home page
-def index(request):
-    return render(request, 'index.html')
 
-#to call a page for dev purpose
-def blank(request):
-    return render(request, 'index.html')
+#to call home page
+@login_required(login_url='signin')
+def index(request):
+
+    posts = Post.objects.all()
+    return render(request, 'index.html', {'posts':posts})
+
+#for uploading posts
+@login_required(login_url='signin')
+def upload(request):
+
+    if request.method == 'POST':
+        user = request.user.username
+        image = request.FILES.get('upload_image')
+        caption = request.POST['caption']
+
+        new_post = Post.objects.create(user=user, image=image, caption=caption)
+        new_post.save()
+
+        return redirect('/')
+    else:
+        return redirect('/')
+#for liking posts
+@login_required(login_url='signin')
+def like(request):
+    userName = request.user.username
+    postId = request.GET.get('post_id')
+
+    post = Post.objects.get(id=postId)
+    like_filter = LikePost.objects.filter(post_id=postId, username=userName).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=postId, username=userName)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes + 1
+        post.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes - 1
+        post.save()
+        return redirect('/')
+
 
 # to create a new user
 def signup(request):
@@ -38,7 +76,7 @@ def signup(request):
                 user_model = User.objects.get(username  = username)
                 new_profile = Profiles.objects.create(user = user_model, id_user = user_model.id)
                 new_profile.save()
-                return redirect('blank')
+                return redirect('/')
         else :
             messages.info(request, 'Password Not Matching')
             return redirect('signup')
@@ -64,6 +102,7 @@ def signin(request):
         return render(request, 'signin.html')
     
 # for log out from the account
+@login_required(login_url='signin')
 def logout(request):
     auth.logout(request)
     return redirect('signin') 

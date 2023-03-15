@@ -10,9 +10,38 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <h1>Welcome to People Connect</h1>
-    <a href="logout">
-        <button>Log out</button>
-    </a>
+    <div class="root"></div>
+        <h1 class="root">Welcome to People Connect</h1>
+
+        <div class="posts-feed">
+            {% for post in posts reversed %}
+            <h5>@{{ post.user }} </div><br>
+            <img width="500px" height="500px" src=" {{ post.image.url }}" alt="post"><br>
+            </h5> {{ post.caption }}</h5><br>
+            <a href="/like-post?post_id={{post.id}}">Like</a>
+            <div>
+                {% if post.no_of_likes == 0 %}
+                <p>No likes</p>
+                {% elif post.no_of_likes == 1 %}
+                <p>Liked by {{post.no_of_likes}} person</p>
+                {% else %}
+                <p>Liked by {{post.no_of_likes}} people</p>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <form action="upload" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="upload_image">
+            <textarea name="caption" placeholder="Caption"></textarea>
+            <button type="submit">Upload</button>
+        </form>
+
+
+        <a href="logout">
+            <button>Log out</button>
+        </a>
+    </div>
 </body>
 </html>
