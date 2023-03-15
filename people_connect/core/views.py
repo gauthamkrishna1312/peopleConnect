@@ -5,13 +5,15 @@ from .models import Profiles
 
 # Create your views here.
 
+#to call home page
 def index(request):
     return render(request, 'index.html')
 
+#to call a page for dev purpose
 def blank(request):
     return render(request, 'index.html')
 
-
+# to create a new user
 def signup(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -42,3 +44,26 @@ def signup(request):
             return redirect('signup')
     else :
         return render(request, 'signup.html')
+    
+
+# for the login feature 
+def signin(request):
+    if request.method == 'POST' :
+        usernameU = request.POST.get('username')
+        passwordP = request.POST.get('password')
+
+        user = auth.authenticate(username=usernameU, password=passwordP)
+
+        if user is not None :
+            auth.login(request, user)
+            return redirect('/') 
+        else :
+            messages.info(request, 'Username or Password is unmatching')
+            return redirect('signin') 
+    else :
+        return render(request, 'signin.html')
+    
+# for log out from the account
+def logout(request):
+    auth.logout(request)
+    return redirect('signin') 
