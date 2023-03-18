@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profiles, Post, LikePost
+from .models import Profiles, Post, LikePost 
+
 
 # Create your views here.
 
@@ -13,6 +14,15 @@ def index(request):
 
     posts = Post.objects.all()
     return render(request, 'index.html', {'posts':posts})
+
+#search for people
+@login_required(login_url='signin')
+def search(request):
+    usrname = request.POST.get('username')
+    results = User.objects.filter(username__icontains = usrname)
+    context = {'results': results}
+    return render(request, 'search.html', context)
+
 
 #for profile page
 @login_required(login_url='signin')
@@ -27,7 +37,7 @@ def account(request,usnm):
         'user_profile' : user_profile,
         'user_post' : user_post,
         'user_post_lenght' : user_post_lenght,
-    }
+        }
     return render(request, 'account.html', context)
 
 #for account settings
@@ -43,7 +53,7 @@ def accounts_settings(request):
             user_profile.bio = request.POST['bio']
         user_profile.save()
 
-        return redirect('settings')
+        return render(request,'account.html', {'user_profile': user_profile})
     return render(request, 'accounts_settings.html', {'user_profile': user_profile})
 
 #for uploading posts

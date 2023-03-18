@@ -10,8 +10,18 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <div class="root"></div>
-        <h1 class="root">Welcome to People Connect</h1>
+    <div class="">
+        <h1 class="root">Welcome to People Connect</h1><br>
+        <button>
+            <a href="{% url 'account' user.username %}">View profile</a>
+        </button>
+
+        <form method="POST" action="/search">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Sraerch people">
+            <button type="submit">Go</button>
+        </form>
+          
 
         <div class="posts-feed">
             {% for post in posts reversed %}
@@ -37,7 +47,7 @@
             <textarea name="caption" placeholder="Caption"></textarea>
             <button type="submit">Upload</button>
         </form>
-
+        <button><a href="/accounts_settings">Accounts Settings</a></button><br>
 
         <a href="logout">
             <button>Log out</button>

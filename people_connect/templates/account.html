@@ -9,12 +9,18 @@
     <title>Profile_{{user_profile.user.username}}</title>
 </head>
 <body>
-    <h1>Profile</h1>
+    <h1><a href="/">Home</a>/Profile</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="hidden" value="{{user.username}}" name="friend">
+        <input type="hidden" value="{{user_object.username}}" name="friend01">
+    </form>
     <div class="account-details">
         <img src="{{user_profile.profileimage.url}}" alt="profile_picture">
         <h4>Username : {{user_profile.user.username}}</h4>
         <h4>Bio : {{user_profile.bio}}</h4>
         <h4>Posts : {{user_post_lenght}}</h4>
     </div>
+    <button><a href="/accounts_settings">Accounts Settings</a></button><br>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profiles</title>
+</head>
+<body>
+    <h1>People</h1>
+    {% for user in results %}
+        <div>
+          <h3>{{ user.username }}</h3>
+          <p>{{ user.email }}</p>
+          <a href="{% url 'account' user.username %}">View profile</a>
+        </div>
+    {% empty %}
+        <p>No results found.</p>
+    {% endfor %}
+</body>
+</html>
