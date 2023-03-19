@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,22 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile_Settings_{{user_profile.user.username}}</title>
+    <link rel="stylesheet" href="{% static 'settings.css' %}">
 </head>
 <body>
-    <h1><a href="/">Home</a> / Account Settings / <b>{{ user.username }}</b></h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-       <div>
-            <h2>Profile Image</h2>
-            <input type="file" name="image"><br>
-            <img width="100px" height="100px" src="{{user_profile.profileimage.url}}" alt="profileimage"><br>
-            <h2>Bio</h2>
-            <textarea id="about" name="bio">{{user_profile.bio}}</textarea>         
-       </div> 
-       <div>
-           <button> <a href="/">Cancel</a> </button>
-           <button type="submit"> Save </button>
-       </div>
-    </form>
+    <header>
+        <h1>Account Settings</h1>
+    </header>
+    <main>
+        <section id="account-settings">
+          <div id="account-settings-header">
+            <h2>Account Settings/{{user_profile.user.username}}</h2>
+            <a href="/">Home</a>
+          </div>
+          <div id="profile-image">
+            <img src="{{user_profile.profileimage.url}}" alt="Profile Image">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}  
+              <input type="file" id="profile-image-upload" name="image">
+              <label for="profile-image-upload">Upload New Profile Image</label>
+              <p>Bio</p>
+              <textarea id="about" name="bio">{{user_profile.bio}}</textarea> 
+              <div class="form-buttons">
+                <button type="submit">Save</button>
+                <button><a href="/">Cancel</a></button>
+              </div>
+            </form>
+          </div>
+        </section>
+    </main>
 </body>
 </html>

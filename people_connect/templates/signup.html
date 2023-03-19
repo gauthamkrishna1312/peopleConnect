@@ -1,3 +1,4 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,26 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>signup</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
 </head>
 <body>
-    <h1>Sign Up</h1>
-
-    <div>
-        {% for message in messages %}
-        <h5>{{ message }}</h5>
-        {% endfor %}
-    </div>
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="text" placeholder="Username" name="username" required><br><br>
-        <input type="email" placeholder="Email" name="email" required><br><br>
-        <input type="password" placeholder="Password" name="password" required><br><br>
-        <input type="password" placeholder="Confirm Password" name="password2" required><br><br>
-
-        <button type="submit">SignUp</button><h1>   </h1>
-        <a href="/signin">log in</a>
-
-    </form>      
+    <header>
+        <h1>Sign Up to PeopleConnect</h1>
+    </header>
+    <main>
+        <section id="signup-form">
+            <h2>Sign Up</h2>
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" id="name" required>
+                <input type="email" name="email" placeholder="Email" id="email" required>
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                <input type="password" name="password2" placeholder="Confirm Password" id="confirm-password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="/signin">Sign in</a></p>
+        </section>
+    </main>   
 </body>
 </html>

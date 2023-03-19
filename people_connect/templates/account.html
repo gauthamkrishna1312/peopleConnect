@@ -7,42 +7,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile_{{user_profile.user.username}}</title>
+    <link rel="stylesheet" href="{% static 'account.css' %}">
+
 </head>
 <body>
-    
-    <h1><a href="/">Home</a>/Profile</h1>   
-
-    <span>{{user_followers}} Followers || </span>
-    <span>   {{user_following}} Following</span>
-
-
-    <form action="/follow" method="POST">
-        {% csrf_token %}
-        <input type="hidden" value="{{user.username}}" name="follower">
-        <input type="hidden" value="{{user_object.username}}" name="user">
-        {% if user_object.username == user.username %}
-            <p> </p>
-        {% else %}        
-            <button type="submit">{{button_text}}</button>
-        {% endif %}
-    </form>
-
-    <div class="account-details">
-        <img src="{{user_profile.profileimage.url}}" alt="profile_picture">
-        <h4>Username : {{user_profile.user.username}}</h4>
-        <h4>Bio : {{user_profile.bio}}</h4>
-        <h4>Posts : {{user_post_lenght}}</h4>
-    </div>
-
-    {% if mutual_friends %}
-        <h3>Mutual Friends:</h3>
-        <ul>
-        {% for friend in mutual_friends %}
-            <li><a href="{% url 'account' friend.user %}">{{ friend.user }}</a></li>
-        {% endfor %}
-         </ul>
-    {% endif %}
-
-    <button><a href="/accounts_settings">Accounts Settings</a></button><br>
+    <header>
+        <h1>Account/{{user_profile.user.username}}</h1>
+    </header>
+    <main>
+        <section id="profile">
+            <div id="profile-header">
+                <div id="profile-image">
+                    <img src="{{user_profile.profileimage.url}}" alt="profile_picture">
+                </div>
+                <div id="profile-details">
+                    <h2>Username : {{user_profile.user.username}}</h2>
+                    <p>Bio : {{user_profile.bio}}</p>
+                    <p>Total Posts : {{user_post_lenght}}</p>
+                    <ul>
+                        <li><strong>Followers:</strong> {{user_followers}}</li>
+                        <li><strong>Number of posts:</strong> {{user_following}}</li>
+                            {% if mutual_friends %}
+                                <h3>Mutual Followers</h3>
+                                <ul>
+                                    {% for friend in mutual_friends %}
+                                        <li><a href="{% url 'account' friend.user %}">{{ friend.user }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="profile-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/accounts_settings">Account Settings</a></li>
+                    <form action="/follow" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{user.username}}" name="follower">
+                        <input type="hidden" value="{{user_object.username}}" name="user">
+                        {% if user_object.username == user.username %}
+                            <p> </p>
+                        {% else %}        
+                            <button type="submit"><li>{{button_text}}</li></button>
+                        {% endif %}
+                    </form>
+                </ul>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

@@ -1,0 +1,50 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+header h1 {
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#search-results {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+#search-results h2 {
+  margin-top: 0;
+}
+
+.search-result {
+  margin-bottom: 20px;
+}
+
+.search-result h3 {
+  margin-top: 0;
+}
+
+.search-result a {
+  color: #333;
+  text-decoration: none;
+}
+
+.search-result a:hover {
+  text-decoration: underline;
+}

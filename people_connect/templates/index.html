@@ -7,51 +7,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>people_connect</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
 </head>
 <body>
-    <div class="">
-        <h1 class="root">Welcome to People Connect</h1><br>
-        <button>
-            <a href="{% url 'account' user.username %}">View profile</a>
-        </button>
-
-        <form method="POST" action="/search">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Sraerch people">
-            <button type="submit">Go</button>
-        </form>
-          
-
-        <div class="posts-feed">
+    <header>
+        <h1>People Connect</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{% url 'account' user.username %}">Profile</a></li>
+                    <li><a href="/accounts_settings">Settings</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </nav>
+            <form id="search-form" method="POST" action="/search">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Sraerch people">
+                <button type="submit">Go</button>
+            </form>
+    </header>
+        <main>
+            <section id="post-form">
+                <form action="upload" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="upload_image">
+                    <textarea name="caption" placeholder="Caption"></textarea>
+                    <button type="submit">Upload</button>
+                </form>
+            </section>
             {% for post in posts reversed %}
-            <h5><a href="/account/{{post.user}}">@{{ post.user }} </a></div><br>
-            <img width="500px" height="500px" src=" {{ post.image.url }}" alt="post"><br>
-            </h5> {{ post.caption }}</h5><br>
-            <a href="/like-post?post_id={{post.id}}">Like</a>
-            <div>
-                {% if post.no_of_likes == 0 %}
-                <p>No likes</p>
-                {% elif post.no_of_likes == 1 %}
-                <p>Liked by {{post.no_of_likes}} person</p>
-                {% else %}
-                <p>Liked by {{post.no_of_likes}} people</p>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+            <section id="post-list">
+                <article class="post">
+                    <header>
+                        <p style="color: rgb(255, 255, 255);"><a href="/account/{{post.user}}">@{{ post.user }} </a></p>
+                    </header>
+                    <div class="post-content">
+                        <img width="500px" height="500px" src=" {{ post.image.url }}" alt="post"><br>
+                        </h5> {{ post.caption }}</h5><br>
+                    </div>
 
-        <form action="upload" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="upload_image">
-            <textarea name="caption" placeholder="Caption"></textarea>
-            <button type="submit">Upload</button>
-        </form>
-        <button><a href="/accounts_settings">Accounts Settings</a></button><br>
-
-        <a href="logout">
-            <button>Log out</button>
-        </a>
-    </div>
+                    <footer>
+                        <button class="like-btn"><a href="/like-post?post_id={{post.id}}">Like</a></button>
+                        <p>
+                            {% if post.no_of_likes == 0 %}
+                            <p>No likes</p>
+                            {% elif post.no_of_likes == 1 %}
+                            <p>Liked by {{post.no_of_likes}} person</p>
+                            {% else %}
+                            <p>Liked by {{post.no_of_likes}} people</p>
+                            {% endif %}
+                        </p>
+                    </footer>
+                </article>
+            </section>
+            {% endfor %}
+        </main>
+    <footer>
+        
+    </footer>
 </body>
 </html>
