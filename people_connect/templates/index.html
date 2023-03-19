@@ -25,7 +25,7 @@
 
         <div class="posts-feed">
             {% for post in posts reversed %}
-            <h5>@{{ post.user }} </div><br>
+            <h5><a href="/account/{{post.user}}">@{{ post.user }} </a></div><br>
             <img width="500px" height="500px" src=" {{ post.image.url }}" alt="post"><br>
             </h5> {{ post.caption }}</h5><br>
             <a href="/like-post?post_id={{post.id}}">Like</a>

@@ -9,18 +9,40 @@
     <title>Profile_{{user_profile.user.username}}</title>
 </head>
 <body>
-    <h1><a href="/">Home</a>/Profile</h1>
-    <form action="" method="POST">
+    
+    <h1><a href="/">Home</a>/Profile</h1>   
+
+    <span>{{user_followers}} Followers || </span>
+    <span>   {{user_following}} Following</span>
+
+
+    <form action="/follow" method="POST">
         {% csrf_token %}
-        <input type="hidden" value="{{user.username}}" name="friend">
-        <input type="hidden" value="{{user_object.username}}" name="friend01">
+        <input type="hidden" value="{{user.username}}" name="follower">
+        <input type="hidden" value="{{user_object.username}}" name="user">
+        {% if user_object.username == user.username %}
+            <p> </p>
+        {% else %}        
+            <button type="submit">{{button_text}}</button>
+        {% endif %}
     </form>
+
     <div class="account-details">
         <img src="{{user_profile.profileimage.url}}" alt="profile_picture">
         <h4>Username : {{user_profile.user.username}}</h4>
         <h4>Bio : {{user_profile.bio}}</h4>
         <h4>Posts : {{user_post_lenght}}</h4>
     </div>
+
+    {% if mutual_friends %}
+        <h3>Mutual Friends:</h3>
+        <ul>
+        {% for friend in mutual_friends %}
+            <li><a href="{% url 'account' friend.user %}">{{ friend.user }}</a></li>
+        {% endfor %}
+         </ul>
+    {% endif %}
+
     <button><a href="/accounts_settings">Accounts Settings</a></button><br>
 </body>
 </html>

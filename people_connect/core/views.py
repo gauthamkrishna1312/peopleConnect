@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profiles, Post, LikePost 
-
+from .models import Profiles, Post, LikePost, FollowersCount
 
 # Create your views here.
 
@@ -23,7 +22,22 @@ def search(request):
     context = {'results': results}
     return render(request, 'search.html', context)
 
-
+@login_required(login_url='signin')
+def follow(request):
+    if request.method == 'POST':
+        follower = request.POST['follower']
+        user = request.POST['user']
+        if FollowersCount.objects.filter(follower=follower, user=user).first():
+            delete_follower = FollowersCount.objects.filter(follower=follower, user=user)
+            delete_follower.delete()
+            return redirect("/account/"+user)
+        else :
+            new_follower = FollowersCount.objects.create(follower=follower, user=user)
+            new_follower.save()
+            return redirect("/account/"+user)
+    else :
+        return redirect('/')
+    
 #for profile page
 @login_required(login_url='signin')
 def account(request,usnm):
@@ -32,11 +46,37 @@ def account(request,usnm):
     user_post = Post.objects.filter(user = usnm)
     user_post_lenght = len(user_post)
 
+    follower = request.user.username
+    user = usnm
+
+    if FollowersCount.objects.filter(follower=follower, user=user).first():
+        button_text = 'Unfollow'
+    else :
+        button_text = 'follow'
+
+    user_followers = len(FollowersCount.objects.filter(user = usnm))
+    user_following = len(FollowersCount.objects.filter(follower = usnm))
+
+    #for mutual followers
+    current_user = request.POST.get('user')
+    logedin_user = request.user.username
+
+    # Retrieve the list of friends for each user
+    current_user1 = FollowersCount.objects.all()
+    logedin_user1 = FollowersCount.objects.all()
+
+    # Find the intersection of the two sets
+    mutual_friends = current_user1.intersection(logedin_user1)
+
     context = {
         'user_object' : user_object,
         'user_profile' : user_profile,
         'user_post' : user_post,
         'user_post_lenght' : user_post_lenght,
+        'button_text' : button_text,
+        'user_followers' : user_followers,
+        'user_following' : user_following,
+        'mutual_friends' : mutual_friends,
         }
     return render(request, 'account.html', context)
 
@@ -111,9 +151,7 @@ def signup(request):
             else :
                 user = User.objects.create_user(username = username, email=email, password=password)
                 user.save()
-
-                # Log on to profile page
-
+                
                 #create profile object
                 user_model = User.objects.get(username  = username)
                 new_profile = Profiles.objects.create(user = user_model, id_user = user_model.id)

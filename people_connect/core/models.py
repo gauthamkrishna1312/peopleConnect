@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.utils import timezone
 import uuid
 from datetime import datetime
 
@@ -14,6 +16,14 @@ class Profiles(models.Model):
     def __str__(self):
         return self.user.username
     
+
+class FollowersCount(models.Model):
+    follower = models.CharField(max_length=100)
+    user = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user
+
 #for creating post in account
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
