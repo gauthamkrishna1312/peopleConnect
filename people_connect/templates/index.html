@@ -42,10 +42,11 @@
                         <p style="color: rgb(255, 255, 255);"><a href="/account/{{post.user}}">@{{ post.user }} </a></p>
                     </header>
                     <div class="post-content">
-                        <img width="500px" height="500px" src=" {{ post.image.url }}" alt="post"><br>
+                        {% if post.image %}
+                        <img width="500px" height="500px" src="{{ post.image.url }}" alt="post"><br>
+                        {% endif %}
                         </h5> {{ post.caption }}</h5><br>
                     </div>
-
                     <footer>
                         <button class="like-btn"><a href="/like-post?post_id={{post.id}}">Like</a></button>
                         <p>
